@@ -5,7 +5,6 @@ const name = document.querySelector("#nimi")
 const text1 = document.querySelector("#message")
 let username = ""
 let count = 0
-let saving = []
 
 while (username === "" || username === null) {
     username = window.prompt("Whats your username?")
@@ -40,7 +39,6 @@ sendchat.addEventListener("click", function () {
     messages.style.fontSize = "22px"
     texty.appendChild(messages)
     messages.classList.add("kirjad")
-    console.log(count)
     text1.value = ""
 
     if (count === 6) {
@@ -76,14 +74,13 @@ async function save(user, text) {
 async function load() {
     const response = await fetch('https://tinkr.tech/sdb/Chat4');
     const saved = await response.json();
-    console.log(saved[0].texts)
     console.log(saved[0].username)
-    console.log(saved)
+    console.log(saved[0].texts)
     let count2 = 0
     let count4 = 0
+    for (const idk of saved) {
     count4 = count4 + 1
     count = count4
-    for (const idk of saved) {
         const texty = document.createElement("div")
         texty.style.width = "600px"
         texty.style.borderRadius = "16px"
@@ -104,10 +101,8 @@ async function load() {
         texty.appendChild(messages)
         messages.classList.add("kirjad")
 
-        count = count2
-        console.log(count)
+       
         console.log(idk)
-        saving.push(idk)
         count2 = count2 + 1
     }
 }
