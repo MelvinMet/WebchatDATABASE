@@ -5,16 +5,16 @@ const name = document.querySelector("#nimi")
 const text1 = document.querySelector("#message")
 let username = ""
 let count = 0
-getName()
 
 while (username === "" || username === null) {
-    username = window.prompt("Whats your username?")
+        getName()
     if (username) {
         username = username.trim()
         name.textContent = "YOUR NAME: " + username
-        console.log(username)
         saveName(username)
+        break
     }
+    username = window.prompt("Whats your username?")
 }
 
 sendchat.addEventListener("click", function () {
@@ -43,7 +43,7 @@ sendchat.addEventListener("click", function () {
     messages.classList.add("kirjad")
     text1.value = ""
 
-    if (count === 10) {
+    if (count === 8) {
         const koik = document.querySelectorAll(".kirjad")
         for (const eemalda of koik) {
             eemalda.remove()
@@ -100,7 +100,7 @@ async function load() {
         count2 = count2 + 1
         count = count2
     }
-    if (count === 10) {
+    if (count === 8) {
         deleteOLD()
         count = 0
     }
@@ -120,15 +120,15 @@ async function deleteOLD() {
     }
 }
 
-setInterval(load, 2000)
 load()
+setInterval(load, 2000)
 
 function saveName(nimi){
-    localStorage.setItem("username", JSON.stringify(username))
+    localStorage.setItem("username", JSON.stringify(nimi))
 }
 
 function getName(){
-    const saved = JSON.parse(localStorage.getItem('username')) || [];
+    const saved = JSON.parse(localStorage.getItem('username')) || "";
     username = saved
     name.textContent = "YOUR NAME: " + username
 }
