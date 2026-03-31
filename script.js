@@ -5,6 +5,7 @@ const name = document.querySelector("#nimi")
 const text1 = document.querySelector("#message")
 let username = ""
 let count = 0
+getName()
 
 while (username === "" || username === null) {
     username = window.prompt("Whats your username?")
@@ -12,6 +13,7 @@ while (username === "" || username === null) {
         username = username.trim()
         name.textContent = "YOUR NAME: " + username
         console.log(username)
+        saveName(username)
     }
 }
 
@@ -41,7 +43,7 @@ sendchat.addEventListener("click", function () {
     messages.classList.add("kirjad")
     text1.value = ""
 
-    if (count === 6) {
+    if (count === 10) {
         const koik = document.querySelectorAll(".kirjad")
         for (const eemalda of koik) {
             eemalda.remove()
@@ -55,11 +57,8 @@ sendchat.addEventListener("click", function () {
     save(username, kiri)
 })
 
-
-
-
 async function save(user, text) {
-    const response = await fetch('https://tinkr.tech/sdb/Chat4', {
+    const response = await fetch('https://tinkr.tech/sdb/Chat5', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -70,17 +69,14 @@ async function save(user, text) {
 
 }
 
-
 async function load() {
-    const response = await fetch('https://tinkr.tech/sdb/Chat4');
+    const response = await fetch('https://tinkr.tech/sdb/Chat5');
     const saved = await response.json();
-    console.log(saved[0].username)
-    console.log(saved[0].texts)
+    textbox.innerHTML = ""
     let count2 = 0
     let count4 = 0
     for (const idk of saved) {
     count4 = count4 + 1
-    count = count4
         const texty = document.createElement("div")
         texty.style.width = "600px"
         texty.style.borderRadius = "16px"
@@ -101,25 +97,38 @@ async function load() {
         texty.appendChild(messages)
         messages.classList.add("kirjad")
 
-       
-        console.log(idk)
         count2 = count2 + 1
+        count = count2
+    }
+    if (count === 10) {
+        deleteOLD()
+        count = 0
     }
 }
 
 async function deleteOLD() {
-    const response = await fetch('https://tinkr.tech/sdb/Chat4');
+    const response = await fetch('https://tinkr.tech/sdb/Chat5');
     const saved = await response.json();
     let count3 = 0
     for (const item of saved) {
         const iden = item.id
         count3 = count3 + 1
 
-        await fetch(`https://tinkr.tech/sdb/Chat4/${iden}`, {
+        await fetch(`https://tinkr.tech/sdb/Chat5/${iden}`, {
             method: 'DELETE'
         });
     }
 }
 
-
+setInterval(load, 2000)
 load()
+
+function saveName(nimi){
+    localStorage.setItem("username", JSON.stringify(username))
+}
+
+function getName(){
+    const saved = JSON.parse(localStorage.getItem('username')) || [];
+    username = saved
+    name.textContent = "YOUR NAME: " + username
+}
